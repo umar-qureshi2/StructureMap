@@ -1,4 +1,6 @@
-﻿using StructureMap;
+﻿using GenFu;
+using StructureMap;
+using StructureMap.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,20 @@ namespace HelloStructureMap
     {
 
         static void Main(string[] args)
+        {
+            PlayWithStructureMap();
+            PlayWithGenFu();
+
+        }
+
+        private static void PlayWithGenFu()
+        {
+            A.Configure<Customer>().Fill(x => x.LastName, "Senior");
+            var customers = A.ListOf<Customer>(10);
+            customers.ForEach(x => Console.WriteLine(x));
+        }
+
+        private static void PlayWithStructureMap()
         {
             // Configure and build a brand new
             // StructureMap Container object
@@ -37,13 +53,11 @@ namespace HelloStructureMap
                 });
             });
 
-            var foo = container.GetInstance<Foo>();
+            var foo = container.GetInstance<Foo>();// The IFoo version is not working, need to check why it doesn't work .ShouldBeOfType<Foo>();
             var bar = foo.Bar;
 
             Console.WriteLine(foo);
             Console.WriteLine(bar);
-
-
         }
     }
 }
